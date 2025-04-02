@@ -1,6 +1,6 @@
-# pywsgiapp
+# pyWSGIapp
 
-`pywsgiapp` is a lightweight WSGI application framework designed to simplify the creation of WSGI-based web applications. It provides a simple interface for handling HTTP requests and responses, making it easy to build and deploy web applications.
+`pywsgiapp`  is a lightweight WSGI application framework aimed at simplifying the development of WSGI-based web applications. It offers an intuitive interface for managing HTTP requests and responses, enabling easy creation and deployment of web applications.
 
 ---
 

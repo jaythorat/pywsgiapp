@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="pywsgiapp",
     version="0.0.2",
-    description="A lightweight WSGI application",
+    description="Bring Your Code to the Web with Ease using a Lightweight WSGI Application.",
     long_description=long_description, 
     long_description_content_type="text/markdown",  
     author="Jay Thorat",
