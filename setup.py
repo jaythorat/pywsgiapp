@@ -1,9 +1,14 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setup(
     name="pywsgiapp",
     version="0.0.1",
     description="A lightweight WSGI application",
+    long_description=long_description, 
+    long_description_content_type="text/markdown",  
     author="Jay Thorat",
     author_email="dev.jaythorat@gmail.com",
     url="https://github.com/jaythorat/pywsgiapp",
