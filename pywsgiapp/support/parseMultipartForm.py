@@ -53,6 +53,9 @@ class ParseMultipartFormdata:
 
             field_name = nameMatch.group(1).decode('utf-8', 'replace')
 
+            # Clean the contentBlock by stripping unwanted characters
+            contentBlock = contentBlock.rstrip(b'\r\n').rstrip(b'-')
+
             if filenameMatch:
                 filename = filenameMatch.group(1).decode('utf-8', 'replace')
                 result[field_name] = {
@@ -60,6 +63,6 @@ class ParseMultipartFormdata:
                     'content': contentBlock
                 }
             else:
-                result[field_name] = contentBlock.decode('utf-8', 'replace')
+                result[field_name] = contentBlock.decode('utf-8', 'replace').strip()
 
         return result
