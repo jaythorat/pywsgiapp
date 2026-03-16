@@ -31,14 +31,14 @@ def requestHandler(url:str, requestHeaders:dict, postData:dict) -> dict:
 
 corsConfig = {
     'enableCORS' : True,
+    'reflectOrigin' : True,
     'headers' :  [
         ('Content-Type', 'application/json '),
         ('Access-Control-Allow-Origin', "*"),
         ('Access-Control-Allow-Methods', 'POST, OPTIONS, GET'),
         ('Access-Control-Allow-Credentials','true'),
         ('Access-Control-Allow-Headers', 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,content-type,Authorization')
-        ]  
+        ] 
 }
 
 app = createWSGIApp(requestHandler,corsConfig=corsConfig)
-

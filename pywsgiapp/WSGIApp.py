@@ -52,6 +52,10 @@ class WsgiApp:
                 raise ValueError(f"'headers[{i}]' name must be a non-empty string, got: {repr(name)}")
             if not isinstance(value, str):
                 raise ValueError(f"'headers[{i}]' value must be a string, got: {repr(value)}")
+
+        if "reflectOrigin" in corsConfig and not isinstance(corsConfig["reflectOrigin"], bool):
+            raise TypeError("'reflectOrigin' must be a bool")
+
         return True
 
 
@@ -81,20 +85,33 @@ def createWSGIApp(reqestHandler, corsConfig: dict = None):
     cors_enabled = False
     cors_headers = []
 
+    reflect_origin = False
+
     if corsConfig is not None:
         wsgiapp.validateCORSCong(corsConfig)
         cors_enabled = corsConfig["enableCORS"]
         cors_headers = corsConfig["headers"] if cors_enabled else []
+        reflect_origin = corsConfig.get("reflectOrigin", False)
+
+    def _build_headers(environ):
+        if not reflect_origin:
+            return cors_headers
+        request_origin = environ.get("HTTP_ORIGIN", "*")
+        return [
+            ("Access-Control-Allow-Origin", request_origin) if name == "Access-Control-Allow-Origin" else (name, value)
+            for name, value in cors_headers
+        ]
 
     def app(environ, start_response):
+        headers = _build_headers(environ)
         if cors_enabled and environ["REQUEST_METHOD"] == "OPTIONS":
-            start_response("200 OK", cors_headers)
+            start_response("200 OK", headers)
             return [b""]
 
         url, requestHeaders, postData = wsgiapp.processRequestData(environ)
         resp = reqestHandler(url, requestHeaders, postData)
         statusCode, responseHeaderList, encodeResponse = wsgiapp.processResponse(resp)
-        start_response(statusCode, responseHeaderList + cors_headers)
+        start_response(statusCode, responseHeaderList + headers)
         return [encodeResponse]
 
     return app
