@@ -36,7 +36,28 @@ app_basic_cors = createWSGIApp(requestHandler, corsConfig=corsConfig_basic)
 
 
 # ---------------------------------------------------------------------------
-# Example 4: CORS config provided but enableCORS=False
+# Example 4: CORS enabled with reflectOrigin=True
+# The Access-Control-Allow-Origin header is dynamically set to the request's
+# Origin on every request. Required when Access-Control-Allow-Credentials is
+# true — browsers reject '*' with credentials.
+# ---------------------------------------------------------------------------
+
+corsConfig_reflect = {
+    "enableCORS": True,
+    "reflectOrigin": True,
+    "headers": [
+        ("Access-Control-Allow-Origin", "*"),  # fallback when no Origin header present
+        ("Access-Control-Allow-Methods", "GET, POST, OPTIONS"),
+        ("Access-Control-Allow-Headers", "Content-Type, Authorization"),
+        ("Access-Control-Allow-Credentials", "true"),
+    ]
+}
+
+app_reflect_cors = createWSGIApp(requestHandler, corsConfig=corsConfig_reflect)
+
+
+# ---------------------------------------------------------------------------
+# Example 5: CORS config provided but enableCORS=False
 # corsConfig is validated, but no CORS headers are added to responses.
 # Useful for toggling CORS off without removing the config.
 # ---------------------------------------------------------------------------
